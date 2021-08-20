@@ -1,4 +1,7 @@
-import firebase from "firebase/app";
+/* eslint-disable no-unused-vars */
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database'
 
 const config = {
   apiKey: 'AIzaSyBJ8BIozm8m6Mh625DJyLDjKHrZi--120g',
@@ -11,4 +14,5 @@ const config = {
 };
 
 const app = firebase.initializeApp(config);
-
+export const auth = app.auth();
+export const database = app.database('https://chat-app-3d4b8-default-rtdb.asia-southeast1.firebasedatabase.app'); 
