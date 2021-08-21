@@ -2,6 +2,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database'
+import 'firebase/storage'
 
 const config = {
   apiKey: 'AIzaSyBJ8BIozm8m6Mh625DJyLDjKHrZi--120g',
@@ -15,4 +16,5 @@ const config = {
 
 const app = firebase.initializeApp(config);
 export const auth = app.auth();
-export const database = app.database('https://chat-app-3d4b8-default-rtdb.asia-southeast1.firebasedatabase.app'); 
+export const database = app.database('https://chat-app-3d4b8-default-rtdb.asia-southeast1.firebasedatabase.app');
+export const storage = app.storage();
