@@ -4,11 +4,15 @@ import AvatarEditor from 'react-avatar-editor';
 import { useModalState } from '../../misc/custom-hooks';
 import { database, storage } from '../../misc/firebase';
 import { useProfile } from '../../context/profile.context';
+import ProfileAvatar from '../ProfileAvatar';
 
 const fileInputTypes = '.png, .jpeg, .jpg';
 
 const acceptedFileTypes = ['image/png', 'image/jpeg', 'image/pjpeg'];
 const isValidFile = file => acceptedFileTypes.includes(file.type);
+
+
+// Check the video again for blob
 
 const getBlob = canvas => {
   return new Promise((resolve, reject) => {
@@ -46,28 +50,29 @@ const AvtarUploadBtn = () => {
   };
 
   const onUploadClick = async () => {
-    const canvas = avatarEditorRef.current.getImageScaledToCanvas();
+    const canvas =  avatarEditorRef.current.getImageScaledToCanvas();
     setIsLoading(true);
     try {
       const blob = await getBlob(canvas);
 
       const avatarFileRef = storage
-        .ref(`/profile/${profile.uid}`)
+        .ref(`/profiles/${profile.uid}`)
         .child('avatar');
 
       const uploadAvatarResult = await avatarFileRef.put(blob, {
         cacheControl: `public , max-age = ${3600 * 24 * 3}`,
       });
 
-      const downloadUrl = uploadAvatarResult.ref.getDownloadURL();
+      const downloadUrl = await uploadAvatarResult.ref.getDownloadURL();
 
       const userAvatarRef = database
-        .ref(`profile/${profile.uid}`)
+        .ref(`profiles/${profile.uid}`)
         .child('avatar');
 
       userAvatarRef.set(downloadUrl);
 
       setIsLoading(false);
+      close();
       Alert.info('Avatar has been uploaded', 4000);
     } catch (err) {
       setIsLoading(false);
@@ -77,6 +82,7 @@ const AvtarUploadBtn = () => {
 
   return (
     <div className="mt-3 text-center">
+      <ProfileAvatar src={profile.avatar} name={profile.name} className='width-200 height-200 img-fullsize font-huge' />
       <label htmlFor="avatar-upload" className="d-block cursor-pointer padded">
         Select New Avatar
         <input
