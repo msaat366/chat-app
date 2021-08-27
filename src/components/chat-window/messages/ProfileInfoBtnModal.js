@@ -10,8 +10,6 @@ const ProfileInfoBtnModal = ({ profile, ...btnProps }) => {
 
   const shortName = profile.name;
 
-  console.log(profile);
-
   return (
     <div>
       <Button {...btnProps} onClick={open} >{shortName}</Button>
