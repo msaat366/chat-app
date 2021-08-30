@@ -17,7 +17,7 @@ const ChatTop = () => {
         <h4 className="text-disappear d-flex align-items-center">
           <Icon
             componentClass={Link}
-            to="/"
+            to="/chat-app/"
             icon="arrow-circle-left"
             size="2x"
             className={

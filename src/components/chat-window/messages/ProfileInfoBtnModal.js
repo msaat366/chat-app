@@ -8,15 +8,13 @@ const ProfileInfoBtnModal = ({ profile, children ,...btnProps }) => {
   const { name, avatar, createdAt } = profile;
   const memeberSince = new Date(createdAt).toLocaleDateString();
 
-  const shortName = profile.name;
-
   return (
     <div>
-      <Button {...btnProps} onClick={open} >{shortName}</Button>
+      <Button {...btnProps} onClick={open} >{name}</Button>
 
       <Modal show={isOpen} onHide={close}>
         <Modal.Header>
-          <Modal.Title>{shortName} Profile</Modal.Title>
+          <Modal.Title>{name} Profile</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
           <ProfileAvatar
@@ -24,7 +22,8 @@ const ProfileInfoBtnModal = ({ profile, children ,...btnProps }) => {
             name={name}
             className="width-200 height-200 img-fullsize font-huge"
           />
-          <h4 className="mt-2">{shortName}</h4>
+          
+          <h4 className="mt-2">{name}</h4>
           <p>Memeber since {memeberSince}</p>
         </Modal.Body>
         <Modal.Footer>

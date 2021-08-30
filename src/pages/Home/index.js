@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router';
+import { Route, Switch, useLocation, useRouteMatch } from 'react-router';
 import { Col, Grid, Row } from 'rsuite';
 import Sidebar from '../../components/Sidebar';
 import { RoomsProvider } from '../../context/rooms.context';
@@ -11,7 +11,16 @@ const Home = () => {
 
   const { isExact } = useRouteMatch();
 
-  const canRenderSidebar = isDesktop || isExact;
+  const { pathname } = useLocation()
+  let ishome = null;
+  
+  if (pathname === '/chat-app/') {
+    ishome = true;
+  } else {
+    ishome =  false;
+  }
+
+  const canRenderSidebar = isDesktop || isExact || ishome ;
 
   return (
     <RoomsProvider>

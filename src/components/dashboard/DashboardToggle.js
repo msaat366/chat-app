@@ -11,17 +11,16 @@ const DashboardToggle = () => {
 
   const onSignOut = useCallback(() => {
     database
-      .ref(`/status/${auth.currentUser.uid}`)
-      .onDisconnect()
-      .set(isOfflineForDatabase).then(()=> {
-        
+      .ref(`status/${auth.currentUser.uid}`)
+      .set(isOfflineForDatabase)
+      .then(() => {
         auth.signOut();
         Alert.info('Signed out', 4000);
         close();
-      }).catch(err => {
-        Alert.error(err.message, 4000)
       })
-
+      .catch(err => {
+        Alert.error(err.message, 4000);
+      });
   }, [close]);
   return (
     <>

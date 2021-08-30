@@ -27,6 +27,7 @@ export const ProfileProvider = ({ children }) => {
       if (authObj) {
         userRef = database.ref(`/profiles/${authObj.uid}`);
         userStatusRef = database.ref(`/status/${authObj.uid}`);
+        
 
         userRef.on('value', snap => {
           const { name, createdAt, avatar } = snap.val();
@@ -77,6 +78,8 @@ export const ProfileProvider = ({ children }) => {
     });
     return () => {
       authUnsub();
+
+       database.ref('.info/connected').off();
 
       if (userStatusRef) {
         userStatusRef.off();

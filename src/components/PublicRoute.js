@@ -15,7 +15,7 @@ const PublicRoute = ({ children, ...routeProps }) => {
     }
 
   if (profile && !isLoading) {
-    return <Redirect to="/" />;
+    return <Redirect to="/chat-app/" />;
   }
 
   return <Route {...routeProps}>{children}</Route>;
