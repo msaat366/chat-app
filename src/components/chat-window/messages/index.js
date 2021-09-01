@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Alert } from 'rsuite';
-import { auth, database } from '../../../misc/firebase';
+import { auth, database, storage } from '../../../misc/firebase';
 import { transformtoArrwithId } from '../../../misc/helpers';
 import MessageItem from './MessageItem';
 
@@ -66,6 +66,7 @@ const Messages = () => {
           if (!msg.likes) {
             msg.likes = {};
           }
+
           msg.likes[uid] = true;
         }
       }
@@ -73,35 +74,50 @@ const Messages = () => {
     });
   }, []);
 
-  const handleDelete = useCallback( async msgId => {
-    // eslint-disable-next-line no-alert
-    if (!window.confirm('Delete this message?')) {
-      return;
-    }
-    const isLast = messages[messages.length - 1].id === msgId;
-    const updates = {};
+  const handleDelete = useCallback(
+    async (msgId, file) => {
+      // eslint-disable-next-line no-alert
+      if (!window.confirm('Delete this message?')) {
+        return;
+      }
+      const isLast = messages[messages.length - 1].id === msgId;
+      const updates = {};
 
-    updates[`messages/${msgId}`] = null;
+      updates[`messages/${msgId}`] = null;
 
-    if (isLast && messages.length > 1) {
-      updates[`/rooms/${chatId}/lastMessage`] = {
-        ...messages[ messages.length - 2 ],
-        msgId: messages[messages.length - 2].id
-      };
-    }
+      if (isLast && messages.length > 1) {
+        updates[`/rooms/${chatId}/lastMessage`] = {
+          ...messages[messages.length - 2],
+          msgId: messages[messages.length - 2].id,
+        };
+      }
 
-    if (isLast && messages.length === 0) {
-      updates[ `/rooms/${chatId}/lastMessage` ] = null;
-    }
+      if (isLast && messages.length === 0) {
+        updates[`/rooms/${chatId}/lastMessage`] = null;
+      }
 
-    try {
-      await database.ref().update(updates)
-      Alert.info('Message has been deleted', 4000)
-    } catch (err) {
-      Alert.error(err.message, 4000);
-    }
+      try {
+        await database.ref().update(updates);
+        Alert.info('Message has been deleted', 4000);
+      } catch (err) {
+        // eslint-disable-next-line consistent-return
+        return Alert.error(err.message, 4000);
+      }
 
-  }, [chatId, messages]);
+      if (file) {
+        
+        try {
+          const fileRef = storage.refFromURL(file.url)
+          await fileRef.delete();
+        } catch (err) {
+          Alert.error(err.message, 4000);
+          
+        }
+      }
+
+    },
+    [chatId, messages]
+  );
 
   return (
     <ul className="msg-list custom-scroll">

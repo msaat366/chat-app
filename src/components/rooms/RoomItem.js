@@ -30,7 +30,7 @@ const RoomItem = ({ room }) => {
               <div className="italic">
                 {lastMessage.author.name} :{' '}
               </div>
-                <span className="text-black">{lastMessage.text}</span>
+                <span className="text-black">{lastMessage.text || lastMessage.file.name}</span>
             </div>
           </>
         ) : (
