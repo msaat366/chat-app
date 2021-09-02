@@ -32,8 +32,10 @@ const ChatBottom = () => {
     setInput(value);
   }, []);
 
+  // eslint-disable-next-line consistent-return
   const onSendClick = async () => {
-    if (input.trim === '') {
+
+    if (input.trim() === "") {
       return;
     }
 
